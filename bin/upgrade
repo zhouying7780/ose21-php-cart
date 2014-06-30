@@ -1,0 +1,37 @@
+#!/bin/bash -eu
+
+php_version=$1
+curr=$2
+next=$3
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+OSE_20_LATEST="0.0.8.2"
+OSE_21_GA="0.0.15"
+
+# Needed for version 0.0.1 -> 0.1.8.  This can be removed after the upgrade
+# has been deployed.
+if version_lt $curr $OSE_20_LATEST; then
+  if [ -e $OPENSHIFT_HOMEDIR/php/metadata/jenkins_shell_command ]; then
+      rm -f $OPENSHIFT_HOMEDIR/php/metadata/jenkins_shell_command
+  fi
+fi
+
+if version_lt $curr $OSE_21_GA; then
+    chown $OPENSHIFT_GEAR_UUID:$OPENSHIFT_GEAR_UUID $OPENSHIFT_PHP_DIR/configuration/etc/conf.d/openshift.conf
+    chcon -u unconfined_u $OPENSHIFT_PHP_DIR/configuration/etc/conf.d/openshift.conf
+fi
+
+# This is not needed for the OSE 2.1 upgrade.  We're picking up the move from
+# versions/ to usr/ directly.
+#if version_lt $curr $OSE_21_GA; then
+#    erb ${OPENSHIFT_PHP_DIR}versions/shared/configuration/etc/php.ini.erb > ${OPENSHIFT_PHP_DIR}configuration/etc/php.ini
+#fi
+
+if version_lt $curr $OSE_21_GA; then
+    echo "${OPENSHIFT_PHP_DIR}configuration/etc/php.d" > ${OPENSHIFT_PHP_DIR}env/PHP_INI_SCAN_DIR
+    # versions/ directory moved from user space (gear) to the shared usr/ directory (root)
+    rm -rf ${OPENSHIFT_PHP_DIR}versions
+    chown $OPENSHIFT_GEAR_UUID:$OPENSHIFT_GEAR_UUID ${OPENSHIFT_PHP_DIR}configuration/etc/php.ini
+    chcon -u unconfined_u ${OPENSHIFT_PHP_DIR}configuration/etc/php.ini
+fi
