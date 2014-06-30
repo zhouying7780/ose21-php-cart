@@ -63,7 +63,4 @@ Endpoints:
     Backend: ''
     Options:
       health: true
-#Source-Url: https://github.com/openshift-qe/ose21-php-cart.git
-#Source-Url: http://github.com/openshift-qe/ose21-php-cart.git
-#Source-Url: git@github.com:openshift-qe/ose21-php-cart.git
 Source-Url: http://github.com/openshift-qe/ose21-php-cart/raw/master/ose21-php-cart.tar.gz
