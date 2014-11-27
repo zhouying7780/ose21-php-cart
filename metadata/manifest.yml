@@ -23,7 +23,7 @@ License-Url: http://www.php.net/license/3_0.txt
 Vendor: redhat
 Cartridge-Version: 0.0.15
 Compatible-Versions: []
-Cartridge-Vendor: REDHAT
+Cartridge-Vendor: redhat
 Categories:
 - service
 - php
